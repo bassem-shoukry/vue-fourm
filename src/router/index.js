@@ -1,7 +1,7 @@
-import Home from "@/components/pages/Home";
-import ThreadShow from "@/components/pages/ThreadShow";
+import Home from "@/pages/Home";
+import ThreadShow from "@/pages/ThreadShow";
 import {createRouter, createWebHistory} from "vue-router";
-import NotFound from "@/components/pages/NotFound";
+import NotFound from "@/pages/NotFound";
 import sourceData from "@/data.json";
 
 const routes = [
