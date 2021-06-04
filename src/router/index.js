@@ -3,6 +3,11 @@ import ThreadShow from "@/pages/ThreadShow";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound";
 import sourceData from "@/data.json";
+import Forum from "@/pages/Forum";
+import Category from "@/pages/Category";
+import Profile from "@/pages/Profile";
+import ThreadCreate from "@/pages/ThreadCreate";
+import ThreadEdit from "@/pages/ThreadEdit";
 
 const routes = [
     {
@@ -11,8 +16,38 @@ const routes = [
         component : Home
     },
     {
+        path : '/me',
+        name : 'Profile',
+        component : Profile,
+        meta:{top:true,smoothScroll:true}
+    },
+    {
+        path : '/me/edit',
+        name : 'ProfileEdit',
+        component : Profile,
+        props: {edit: true}
+    },
+    {
+        path : '/category/:id',
+        name : 'Category',
+        component : Category,
+        props: true
+    },
+    {
+        path : '/forum/:id',
+        name : 'Forum',
+        component : Forum,
+        props: true
+    },
+    {
+        path : '/thread/:threadId/edit',
+        name : 'ThreadEdit',
+        component : ThreadEdit,
+        props: true,
+    },
+    {
         path : '/thread/:id',
-        name : 'PageThreadShow',
+        name : 'ThreadShow',
         component : ThreadShow,
         props: true,
         beforeEnter(to, from, next){
@@ -30,6 +65,12 @@ const routes = [
         }
     },
     {
+        path : '/forum/:forumId/thread/create',
+        name : 'ThreadCreate',
+        component : ThreadCreate,
+        props: true,
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
         component: NotFound,
@@ -39,5 +80,15 @@ const routes = [
 
 export default  createRouter({
     history:createWebHistory(),
-    routes
+    routes,
+    scrollBehavior(to)
+    {
+        const scroll = {}
+
+        if(to.meta.top) scroll.top = 0
+
+        if(to.meta.smoothScroll) scroll.behavior = 'smooth'
+
+        return scroll;
+    }
 });

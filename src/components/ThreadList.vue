@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full">
+  <div class="col-full push-top">
 
     <div class="thread-list">
 
@@ -8,10 +8,10 @@
       <div class="thread" v-for="thread in threads" v-bind:key="thread.key">
         <div>
           <p>
-            <router-link :to="{name:'PageThreadShow',params:{id:thread.id}}">{{thread.title}}</router-link>
+            <router-link :to="{name:'ThreadShow',params:{id:thread.id}}">{{thread.title}}</router-link>
           </p>
           <p class="text-faded text-xsmall">
-            By <a href="#">{{userById(thread.userId).name}}</a>, {{ thread.publishedAt }} replies.
+            By <a href="#">{{userById(thread.userId).name}}</a>, <AppDate :timestamp="thread.publishedAt" /> replies.
           </p>
         </div>
 
@@ -26,7 +26,9 @@
             <p class="text-xsmall">
               <a href="#">{{userById(thread.userId).name}}</a>
             </p>
-            <p class="text-xsmall text-faded">{{ thread.publishedAt }}</p>
+            <p class="text-xsmall text-faded">
+              <AppDate :timestamp="thread.publishedAt"/>
+            </p>
           </div>
         </div>
       </div>
@@ -37,8 +39,6 @@
 </template>
 
 <script>
-import sourceData from "@/data.json";
-
 export default {
 name: "ThreadList",
   props:{
@@ -47,17 +47,15 @@ name: "ThreadList",
       required : true
     }
   },
-  data(){
-    return {
-      posts: sourceData.posts,
-      users: sourceData.users
-    }
+  computed:{
+    posts(){
+      return this.$store.state.posts
+    },
+    users(){
+      return this.$store.state.users
+    },
   },
   methods:{
-    postById(postId)
-    {
-      return this.posts.find(p => p.id === postId)
-    },
     userById(userId)
     {
       return this.users.find(u => u.id === userId)

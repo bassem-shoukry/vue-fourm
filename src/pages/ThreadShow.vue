@@ -1,6 +1,11 @@
 <template>
   <div class="col-large push-top" >
-    <h1>{{thread.title}}</h1>
+    <h1>
+      {{thread.title}}
+      <router-link :to="{name:'ThreadEdit',params:{threadId:thread.id}}" class="btn-green btn-small" tag="button">
+        Edit Thread
+      </router-link>
+    </h1>
     <post-list :posts="threadPosts"/>
     <post-editor @save="addPost"/>
   </div>
@@ -8,7 +13,6 @@
 </template>
 
 <script>
-import sourceData from "@/data.json";
 import PostList from "@/components/PostList";
 import PostEditor from "@/components/PostEditor.vue";
 export default {
@@ -20,15 +24,14 @@ name: "ThreadShow",
       type:String
     }
   },
-  data(){
-      return {
-        threads : sourceData.threads,
-        posts: sourceData.posts,
-        users: sourceData.users,
-      }
-  },
-
   computed:{
+    threads(){
+      return this.$store.state.threads
+    },
+    posts()
+    {
+      return this.$store.state.posts
+    },
     thread()
     {
       return this.threads.find(thread => thread.id === this.id)
@@ -40,15 +43,12 @@ name: "ThreadShow",
   methods: {
     addPost(eventData)
     {
-      console.log(eventData)
-      const postId = 'ggg'+ Math.random();
       const post = {
         ...eventData.post,
         threadId:this.thread.id,
       }
 
-      this.posts.push(post)
-      this.thread.posts.push(postId)
+      this.$store.dispatch('createPost',post)
     }
   }
 }
