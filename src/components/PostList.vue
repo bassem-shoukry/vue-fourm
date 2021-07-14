@@ -2,14 +2,15 @@
   <div class="post-list">
     <div class="post" v-for="post in posts" :key="post.id">
 
-      <div class="user-info">
+      <div v-if="userById(post.userId)" class="user-info">
         <a href="#" class="user-name">{{userById(post.userId).name}}</a>
 
         <a href="#">
           <img class="avatar-large" :src="userById(post.userId).avatar" alt="">
         </a>
 
-        <p class="desktop-only text-small">107 posts</p>
+        <p class="desktop-only text-small">{{userById(post.userId).postsCount}} posts</p>
+        <p class="desktop-only text-small">{{userById(post.userId).threadsCount}} threads</p>
 
       </div>
 
@@ -54,7 +55,7 @@ props : {
   methods:{
     userById(userId)
     {
-      return this.users.find(u => u.id === userId)
+      return this.$store.getters.user(userId)
     }
   },
 }

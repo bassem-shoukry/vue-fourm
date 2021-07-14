@@ -1,5 +1,5 @@
 <template>
-  <div class="col-full push-top">
+  <div v-if="thread && text" class="col-full push-top">
 
     <h1>Update Thread</h1>
     <thread-editor :title="thread.title" :text="text" @save="save" @cancel="cancel"/>
@@ -8,6 +8,8 @@
 
 <script>
 import ThreadEditor from "@/components/ThreadEditor";
+import {findById} from "@/helpers";
+import {mapActions} from "vuex";
 export default {
   name: "ThreadEdit",
   components: {ThreadEditor},
@@ -25,12 +27,14 @@ export default {
     },
     text()
     {
-      return this.$store.state.posts.find(post => post.id === this.thread.posts[0]).text
+      const post = findById(this.$store.state.posts, this.thread.posts[0])
+      return post ? post.text : ''
     }
   },
   methods:{
+    ...mapActions(['fetchThread','fetchThread','fetchPost']),
     async save({title,text}) {
-      const thread = await this.$store.dispatch('updateThread',{
+      const thread = await this.fetchThread({
         id: this.threadId,
         title,
         text
@@ -42,6 +46,10 @@ export default {
       this.$router.push({name:'ThreadShow',params:{id:this.thread.id}})
 
     }
+  },
+  async created() {
+    const thread = await this.fetchThread({ id: this.threadId })
+    this.fetchPost( { id: thread.posts[0] })
   }
 }
 </script>

@@ -17,7 +17,7 @@
 
         <div class="activity">
           <p class="replies-count">
-            {{thread.posts.length}}
+            {{thread.repliesCount}} replies
           </p>
 
           <img class="avatar-medium" :src="userById(thread.userId).avatar" alt="">
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import {findById} from "@/helpers";
+
 export default {
 name: "ThreadList",
   props:{
@@ -58,7 +60,7 @@ name: "ThreadList",
   methods:{
     userById(userId)
     {
-      return this.users.find(u => u.id === userId)
+      return findById(this.users, userId) || {}
     }
   }
 }
