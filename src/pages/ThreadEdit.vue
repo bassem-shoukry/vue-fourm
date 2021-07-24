@@ -32,15 +32,16 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['fetchThread','fetchThread','fetchPost']),
+    ...mapActions(['fetchThread','updateThread','fetchPost']),
     async save({title,text}) {
-      const thread = await this.fetchThread({
+      const thread = await this.updateThread({
         id: this.threadId,
         title,
         text
       })
-      this.$router.push({name:'ThreadShow',params:{id:thread.id}})
+      await this.$router.push({name: 'ThreadShow', params: {id: thread.id}})
     },
+
     cancel()
     {
       this.$router.push({name:'ThreadShow',params:{id:this.thread.id}})

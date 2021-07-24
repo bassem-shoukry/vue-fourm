@@ -2,13 +2,12 @@ import Home from "@/pages/Home";
 import ThreadShow from "@/pages/ThreadShow";
 import {createRouter, createWebHistory} from "vue-router";
 import NotFound from "@/pages/NotFound";
-// import sourceData from "@/data.json";
 import Forum from "@/pages/Forum";
 import Category from "@/pages/Category";
 import Profile from "@/pages/Profile";
 import ThreadCreate from "@/pages/ThreadCreate";
 import ThreadEdit from "@/pages/ThreadEdit";
-
+import store from '@/store'
 const routes = [
     {
         path : '/',
@@ -78,7 +77,7 @@ const routes = [
 
 ]
 
-export default  createRouter({
+const router =   createRouter({
     history:createWebHistory(),
     routes,
     scrollBehavior(to)
@@ -92,3 +91,9 @@ export default  createRouter({
         return scroll;
     }
 });
+
+router.beforeEach(() => {
+    store.dispatch('unsubscribeAllSnapshots')
+})
+
+export default router
