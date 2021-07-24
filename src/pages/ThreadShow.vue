@@ -1,5 +1,5 @@
 <template>
-  <div v-if="thread" class="col-large push-top" >
+  <div v-if="asyncDataStatus_ready" class="col-large push-top">
     <h1>
       {{thread.title}}
       <router-link :to="{name:'ThreadEdit',params:{threadId:thread.id}}" class="btn-green btn-small" tag="button">
@@ -22,6 +22,8 @@ import PostList from "@/components/PostList";
 import PostEditor from "@/components/PostEditor.vue";
 import AppDate from "@/components/AppDate";
 import {mapActions} from "vuex";
+import asyncDataStatus from "@/mixins/asyncDataStatus";
+
 export default {
 name: "ThreadShow",
   components: {AppDate, PostList,PostEditor},
@@ -59,6 +61,7 @@ name: "ThreadShow",
       this.createPost(post)
     }
   },
+  mixins: [asyncDataStatus],
   async created() {
 
     // fetch the thread
@@ -68,7 +71,8 @@ name: "ThreadShow",
 
     const users = posts.map(post => post.userId).concat(thread.userId)
 
-    this.fetchUsers({ids:users})
+    await this.fetchUsers({ids:users})
+    this.asyncDataStatus_fetched()
 
   }
 }
